@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Details</title>
+  </head>
+  <body>
+    <nav class="bg-warning navbar d-flex justify-content-between">
+      <div>
+        <p class="fw-bold ms-5">MACHINE TEST - BOOK DETAILS</p>
+      </div>
+      <div>
+        <button
+          type="submit"
+          class="btn btn-success me-5 p-2"
+          (click)="onAddBook()"
+        >
+          Add Book
+        </button>
+      </div>
+    </nav>
+    <!-- navbar ends here -->
+
+    <!-- modal form for adding book details stsrts here -->
+    <div class="modal fade show" [class.show]="showModal">
+      <div
+        class="modal-dialog"
+        layout="row"
+        layout-align="center center"
+        role="document"
+      >
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              {{ editMode ? "Update Book" : "Add Book" }}
+            </h5>
+            <button
+              (click)="onCloseModal()"
+              class="close"
+              type="button"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form [formGroup]="bookForm" (ngSubmit)="onbookSubmit()">
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="bookId">Book Id</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="bookId"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="bookName">Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="bookName"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="authorName">Author</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="authorName"
+                />
+              </div>
+              <div class="form-group">
+                <label for="publishedYear">Published Year</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="publishedYear"
+                />
+              </div>
+              <div class="form-group">
+                <label for="bookPrice">Price</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="bookPrice"
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                (click)="onCloseModal()"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="submit" class="btn btn-primary">
+                {{ editMode ? "Update Book" : "Add Book" }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- modal form ends here -->
+
+    <!-- table for printing data starts here -->
+    <section class="table_section">
+      <table class="table book_table table-bordered table-striped col-12 mt-5">
+        <tr>
+          <th>Id</th>
+          <th>Name</th>
+          <th>Author</th>
+          <th>Published Year</th>
+          <th>Price</th>
+          <th>Status</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+        <tr *ngFor="let item of books">
+          
+          <td>{{ item.bookId }}</td>
+          <td>{{ item.bookName }}</td>
+          <td>{{ item.authorName }}</td>
+          <td>{{ item.publishedYear }}</td>
+          <td>{{ item.bookPrice }}</td>
+          <td>{{ item.bookStatus }}</td>
+          <td>
+            <button
+              type="submit"
+              class="bg-primary text-light"
+              (click)="onEditBook(item)"
+            >
+              Edit
+            </button>
+          </td>
+          <td>
+            <button
+              type="submit"
+              class="bg-danger text-light"
+              (click)="onDeleteBook(item._id)"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      </table>
+
+      <div>
+        <ul *ngFor="let i of x" class="listPage">
+          <li (click)="pageChange(i)">{{ i }}</li>
+        </ul>
+      </div>
+
+    </section>
+    
+  </body>
+</html>
