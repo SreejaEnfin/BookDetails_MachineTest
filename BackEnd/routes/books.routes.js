@@ -65,7 +65,10 @@ bookrouter.put("/:id", async(req, res) => {
       req.params.id,
       { $set: book },
       { new: true });
-    return res.status(200).send(result);
+    return res.status(200).json({
+      message:'Data updated',
+      data:result
+    });
   } catch(e){
     res.json({
       "success":false,
