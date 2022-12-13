@@ -19,7 +19,7 @@ const BookSchema = yup.object().shape({
   authorName:yup.string().required(),
   publishedYear:yup.number().required(),
   bookPrice:yup.number().required(),
-  bookStatus:yup.number().required()
+  bookStatus:yup.boolean().required()
 });
 
 bookrouter.post('/', async(req, res, next)=>{
@@ -49,17 +49,44 @@ bookrouter.post('/', async(req, res, next)=>{
 })
 
 
+// const createUserSchema = yup.object().shape({
+//   email: yup.string().trim().required(),
+//   firstName: yup.string().trim().required(),
+//   lastName: yup.string().trim().required(),
+//   password: yup.string().trim().required(),
+// });
+
+// router.post('/create-user', async (req, res, next) => {
+//   try {
+//     const parsedData = await createUserSchema.validate(req.body);
+//     const { email, password } = parsedData;
+    
+//     res.json({
+//       "success": true,
+//       "message": "Request successful.",
+//       "data": {}
+//     })
+//   } catch (error) {
+//     res.json({
+//       "success": false,
+//       "message": error.message,
+//       "error_code": 0,
+//       "data": {}
+//     })
+//   }
+// });
+
 // updating a book
 bookrouter.put("/:id", async(req, res) => {
   try{  
-    // const parsedData = await BookSchema.validate(req.body);
+    const parsedData = await BookSchema.validate(req.body);
     let book = {
-      bookId: req.body.bookId,
-      bookName: req.body.bookName,
-      authorName: req.body.authorName,
-      publishedYear: req.body.publishedYear,
-      bookPrice: req.body.bookPrice,
-      bookStatus: req.body.bookStatus,
+      bookId: parsedData.bookId,
+      bookName: parsedData.bookName,
+      authorName: parsedData.authorName,
+      publishedYear: parsedData.publishedYear,
+      bookPrice: parsedData.bookPrice,
+      bookStatus: parsedData.bookStatus,
     };
     const result = await Book.findByIdAndUpdate(
       req.params.id,
