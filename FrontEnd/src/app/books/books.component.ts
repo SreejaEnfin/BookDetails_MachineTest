@@ -40,6 +40,7 @@ export class BooksComponent implements OnInit {
       bookPrice: ['', [Validators.required]],
       bookStatus: 1,
     });
+    
   }
 
 
@@ -54,14 +55,13 @@ export class BooksComponent implements OnInit {
   }
 
   getBooks() {
-    this.bookservice.getBookList(this.page).subscribe((res: any) => {
-      console.log(res.data);
-      this.books = res.data;
-      this.pagecount = res.pageCount;
+    this.bookservice.getBookList(this.page).subscribe((res:any) => {
+      console.log(res.data.finalData);
+      this.books = res.data.finalData;
+      this.pagecount = res.data.pageCount;
+      this.x = res.pages;
       console.log(this.pagecount);
-      for(let i=1;i<=this.pagecount;i++){
-           this.x.push(i);
-      }
+      console.log(this.x);
     });
   }
 
@@ -69,8 +69,8 @@ export class BooksComponent implements OnInit {
   pageChange(i:any){
     console.log(i);
     this.bookservice.getBookList(i).subscribe((res: any) => {
-      console.log(res.data);
-      this.books = res.data;
+      console.log(res.data.finalData);
+      this.books = res.data.finalData;
     });
   }
 
@@ -81,11 +81,6 @@ export class BooksComponent implements OnInit {
     this.bookForm.patchValue(bk);
   }
 
-  // onReset(){
-  //   this.bookForm.reset({
-  //     bookStatus: this.bookForm.get('bookStatus').value,
-  //   });
-  // }
   onbookSubmit() {
     if (this.bookForm.valid) {
       if (this.editMode) {
@@ -97,7 +92,7 @@ export class BooksComponent implements OnInit {
             this.editMode = false;
           },
           (err) => {
-            console.log(err);
+            console.log(err.e);
           }
         );
       } else {

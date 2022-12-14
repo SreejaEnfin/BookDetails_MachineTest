@@ -22,6 +22,8 @@ const BookSchema = yup.object().shape({
   bookStatus:yup.boolean().required()
 });
 
+// post
+
 bookrouter.post('/', async(req, res, next)=>{
   try{
     const parsedData = await BookSchema.validate(req.body);
@@ -49,32 +51,7 @@ bookrouter.post('/', async(req, res, next)=>{
 })
 
 
-// const createUserSchema = yup.object().shape({
-//   email: yup.string().trim().required(),
-//   firstName: yup.string().trim().required(),
-//   lastName: yup.string().trim().required(),
-//   password: yup.string().trim().required(),
-// });
 
-// router.post('/create-user', async (req, res, next) => {
-//   try {
-//     const parsedData = await createUserSchema.validate(req.body);
-//     const { email, password } = parsedData;
-    
-//     res.json({
-//       "success": true,
-//       "message": "Request successful.",
-//       "data": {}
-//     })
-//   } catch (error) {
-//     res.json({
-//       "success": false,
-//       "message": error.message,
-//       "error_code": 0,
-//       "data": {}
-//     })
-//   }
-// });
 
 // updating a book
 bookrouter.put("/:id", async(req, res) => {
@@ -92,15 +69,15 @@ bookrouter.put("/:id", async(req, res) => {
       req.params.id,
       { $set: book },
       { new: true });
-    return res.status(200).json({
+    res.status(200).json({
       message:'Data updated',
       data:result
     });
   } catch(e){
-    res.json({
-      "success":false,
-      "message":"Failed",
-      "data":e
+    res.send({
+      success:false,
+      message:"Failed",
+      data:e
   });
 }
 });
@@ -115,11 +92,19 @@ bookrouter.get('/', async(req, res)=>{
     const startIndex = (page-1)*limit;
   
     const results = {}
+    var pageDown = [];
   try{
-    results.data = await Book.find().limit(limit).skip(startIndex).exec();
+    results.finalData = await Book.find().limit(limit).skip(startIndex).exec();
     results.count = await Book.countDocuments();
     results.pageCount = Math.ceil(results.count/limit);
-    res.status(200).send(results);
+    for(i=1;i<=results.pageCount;i++){
+      pageDown.push(i);
+    }
+    res.status(200).send({
+      message:"Details updated",
+      data:results,
+      pages:pageDown
+    });
   }catch(e){
     res.status(500).json(
       {
